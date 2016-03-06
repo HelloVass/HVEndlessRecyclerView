@@ -3,7 +3,8 @@ package geeklub.org.hellovass.endless_recyclerview.widget;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import geeklub.org.hellovass.endless_recyclerview.R;
@@ -15,6 +16,8 @@ import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreUIHandler;
  * 自定义的 LoadMoreView，如果嫌麻烦，可以用我写的
  */
 public class DefaultLoadMoreFooterView extends RelativeLayout implements ILoadMoreUIHandler {
+
+  private static final String TAG = DefaultLoadMoreFooterView.class.getSimpleName();
 
   private TextView mLoadingHint;
 
@@ -32,11 +35,12 @@ public class DefaultLoadMoreFooterView extends RelativeLayout implements ILoadMo
   }
 
   private void init(Context context, AttributeSet attrs) {
-    LayoutInflater.from(getContext()).inflate(R.layout.layout_default_load_more_footer, this);
+    View.inflate(getContext(), R.layout.listitem_default_load_more_footer, this);
     mLoadingHint = (TextView) findViewById(R.id.loading_text);
-    // 设置自定义的样式
-    setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-        RecyclerView.LayoutParams.MATCH_PARENT));
+    // 设置样式
+    setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT));
+    setBackgroundResource(R.drawable.footer_default_load_more);
   }
 
   @Override public void onLoading() {

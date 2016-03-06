@@ -8,13 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import geeklub.org.hellovass.common_adapter.listener.OnRcvItemClickListener;
 import geeklub.org.hellovass.common_adapter.listener.OnRcvItemLongClickListener;
 import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreHandler;
 import geeklub.org.hellovass.endless_recyclerview.widget.HVEndlessRecyclerView;
-import geeklub.org.hellovass.endless_recyclerview.widget.HVSwipeRefreshLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,11 +21,11 @@ import rx.functions.Func1;
 
 public class MainActivity extends AppCompatActivity {
 
-  @Bind(R.id.swipe_refresh_layout) HVSwipeRefreshLayout mRefreshLayout;
+  private Toolbar mToolbar;
 
-  @Bind(R.id.recycler_view) HVEndlessRecyclerView mRecyclerView;
+  private SwipeRefreshLayout mRefreshLayout;
 
-  @Bind(R.id.toolbar) Toolbar mToolbar;
+  private HVEndlessRecyclerView mRecyclerView;
 
   private SampleAdapter mSampleAdapter;
 
@@ -37,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    ButterKnife.bind(this);
 
     mDataSource = new ArrayList<>();
     mSampleAdapter = new SampleAdapter(this, mDataSource);
@@ -48,26 +44,27 @@ public class MainActivity extends AppCompatActivity {
       }
     });
     mSampleAdapter.setOnItemLongClickListener(new OnRcvItemLongClickListener() {
-      @Override public void onItemLongClick(View view, int position) {
+      @Override public boolean onItemLongClick(View view, int position) {
         Toast.makeText(MainActivity.this, "长按点击事件支持，item position -->>" + position,
             Toast.LENGTH_SHORT).show();
+        return true;
       }
     });
 
-    setUpToolbar();
-    setUpRecyclerView();
-    setUpRefreshLayout();
+    setUpViews();
   }
 
-  private void setUpToolbar() {
+  private void setUpViews() {
+    mToolbar = (Toolbar) findViewById(R.id.toolbar);
+    mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+    mRecyclerView = (HVEndlessRecyclerView) findViewById(R.id.recycler_view);
+
+    // set Toolbar
     setSupportActionBar(mToolbar);
-  }
-
-  private void setUpRefreshLayout() {
+    // set SwipeRefreshLayout
     mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
         android.R.color.holo_green_light, android.R.color.holo_orange_light,
         android.R.color.holo_red_light);
-
     mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh() {
         Observable.timer(2, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
@@ -82,20 +79,18 @@ public class MainActivity extends AppCompatActivity {
             .subscribe();
       }
     });
-
+    // set RecyclerView
     mRecyclerView.postDelayed(new Runnable() {
       @Override public void run() {
         getDummyDataSource();
         mRefreshLayout.setRefreshing(false);
         mSampleAdapter.notifyDataSetChanged();
       }
-    }, 2000);
-  }
+    }, 2 * 1000);
 
-  private void setUpRecyclerView() {
     mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-    mRecyclerView.setHVEndlessRecyclerViewAdapter(mSampleAdapter);
+    mRecyclerView.setAdapter(mSampleAdapter);
     mRecyclerView.useDefaultFooter();// 注意设置 FooterView 的设置顺序
     mRecyclerView.setLoadMoreHandler(new ILoadMoreHandler() {
       @Override public void onLoadMore() {

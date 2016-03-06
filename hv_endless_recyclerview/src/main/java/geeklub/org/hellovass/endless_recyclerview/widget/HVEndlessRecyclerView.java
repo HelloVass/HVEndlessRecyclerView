@@ -139,10 +139,8 @@ public class HVEndlessRecyclerView extends RecyclerView implements ILoadMoreCont
     mBaseRcvAdapter.addFooterView(view);
   }
 
-  public void setHVEndlessRecyclerViewAdapter(BaseRcvAdapter<?> adapter) {
+  public void setAdapter(BaseRcvAdapter<?> adapter) {
+    super.setAdapter(adapter);
     mBaseRcvAdapter = adapter;
-    setAdapter(adapter);
   }
-
-
 }

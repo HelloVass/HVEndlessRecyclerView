@@ -11,20 +11,22 @@ import java.util.List;
  */
 public class SampleAdapter extends BaseRcvAdapter<String> {
 
+  private static final int ITEM_VIEW_TYPE_1 = 123;
+
   public SampleAdapter(Context context, List<String> strings) {
     super(context, strings);
   }
 
-  @Override protected void convert(BaseRecyclerViewHolder holder, String caption) {
+  @Override protected void convert(BaseRecyclerViewHolder holder, String caption,int viewType) {
     TextView title = holder.getView(R.id.tv_caption);
     title.setText(caption);
   }
 
   @Override protected int getItemViewTypeHV(String s) {
-    return 56;
+    return ITEM_VIEW_TYPE_1;
   }
 
-  @Override protected int getLayoutResID(int viewType) {
+  @Override protected int getLayoutResId(int i) {
     return R.layout.item_sample;
   }
 }
