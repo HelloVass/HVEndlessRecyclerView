@@ -80,7 +80,7 @@
   }
 ```
 
-## 嫌弃我写的 Footer 不好看，你可以自定义 Footer
+## 嫌弃我写的 Footer 不好看，你可以自定义 Footer 啊！
 
 ```java
 /**
@@ -101,5 +101,5 @@ public interface ILoadMoreUIHandler {
 ```
 
 ### Tips
-具体可以参考 DefaultLoadMoreFooterView 的栗子！
+具体可以参考 DefaultLoadMoreFooterView 这个[栗子](https://github.com/HelloVass/HVEndlessRecyclerView/blob/master/hv_endless_recyclerview%2Fsrc%2Fmain%2Fjava%2Fgeeklub%2Forg%2Fhellovass%2Fendless_recyclerview%2Fwidget%2FDefaultLoadMoreFooterView.java)！
 
