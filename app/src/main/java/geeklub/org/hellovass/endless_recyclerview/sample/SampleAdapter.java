@@ -11,18 +11,18 @@ import java.util.List;
  */
 public class SampleAdapter extends BaseRcvAdapter<String> {
 
-  private static final int ITEM_VIEW_TYPE_1 = 123;
+  private static final int ITEM_VIEW_TYPE_1 = 233;
 
   public SampleAdapter(Context context, List<String> strings) {
     super(context, strings);
   }
 
-  @Override protected void convert(BaseRecyclerViewHolder holder, String caption,int viewType) {
+  @Override protected void convert(BaseRecyclerViewHolder holder, String caption, int viewType) {
     TextView title = holder.getView(R.id.tv_caption);
     title.setText(caption);
   }
 
-  @Override protected int getItemViewTypeHV(String s) {
+  @Override protected int getDataItemViewTypeHV(String string) {
     return ITEM_VIEW_TYPE_1;
   }
 

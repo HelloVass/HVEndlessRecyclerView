@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/hv_endless_recyclerview" />
+            <option value="$PROJECT_DIR$/hv_recyclerview_common_adapter" />
           </set>
         </option>
       </GradleProjectSettings>

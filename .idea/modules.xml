@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/HVEndlessRecyclerView.iml" filepath="$PROJECT_DIR$/HVEndlessRecyclerView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/hv_endless_recyclerview/hv_endless_recyclerview.iml" filepath="$PROJECT_DIR$/hv_endless_recyclerview/hv_endless_recyclerview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hv_recyclerview_common_adapter/hv_recyclerview_common_adapter.iml" filepath="$PROJECT_DIR$/hv_recyclerview_common_adapter/hv_recyclerview_common_adapter.iml" />
     </modules>
   </component>
 </project>

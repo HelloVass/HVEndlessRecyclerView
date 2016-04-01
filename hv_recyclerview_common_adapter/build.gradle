@@ -8,8 +8,8 @@ android {
   defaultConfig {
     minSdkVersion 14
     targetSdkVersion 23
-    versionCode 1
-    versionName "1.0"
+    versionCode 2
+    versionName "1.0.6"
   }
   buildTypes {
     release {
@@ -23,5 +23,5 @@ dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
   testCompile 'junit:junit:4.12'
   compile 'com.android.support:recyclerview-v7:23.2.0'
-  compile project(':hv_recyclerview_common_adapter')
+  compile 'com.android.support:support-annotations:23.2.0'
 }
