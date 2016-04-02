@@ -100,6 +100,26 @@ public interface ILoadMoreUIHandler {
 }
 ```
 
+### 笔者的善意，nice footer and header
+
+1.当 LayoutManager 为 `LinearLayoutManager` 时
+
+<img src="./design/LinearLayoutManagerDemo.gif" width="500px"/>
+
+2.当 LayoutManager 为 `GridLayoutManager` 时
+
+<img src="./design/GridLayoutManagerDemo.gif" width="500px"/>
+
+3.当 LayoutManager 为 `StaggeredGridLayoutManager` 时
+
+// 请自行想象...
+
+
 ### Tips
 具体可以参考 DefaultLoadMoreFooterView 这个[栗子](https://github.com/HelloVass/HVEndlessRecyclerView/blob/master/hv_endless_recyclerview%2Fsrc%2Fmain%2Fjava%2Fgeeklub%2Forg%2Fhellovass%2Fendless_recyclerview%2Fwidget%2FDefaultLoadMoreFooterView.java)！
+
+
+
+
+
 
