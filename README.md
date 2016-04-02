@@ -104,11 +104,11 @@ public interface ILoadMoreUIHandler {
 
 1.当 LayoutManager 为 `LinearLayoutManager` 时
 
-<img src="./design/LinearLayoutManagerDemo.gif" width="500px"/>
+<img src="./design/LinearLayoutManager Demo.gif" width="500px"/>
 
 2.当 LayoutManager 为 `GridLayoutManager` 时
 
-<img src="./design/GridLayoutManagerDemo.gif" width="500px"/>
+<img src="./design/GridLayoutManager Demo.gif" width="500px"/>
 
 3.当 LayoutManager 为 `StaggeredGridLayoutManager` 时
 
