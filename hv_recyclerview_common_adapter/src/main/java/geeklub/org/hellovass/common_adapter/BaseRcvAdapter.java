@@ -1,7 +1,10 @@
 package geeklub.org.hellovass.common_adapter;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +78,8 @@ public abstract class BaseRcvAdapter<DATA> extends RecyclerView.Adapter<BaseRecy
 
   @Override public BaseRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+    Log.i(TAG, "viewType -->>>" + viewType);
+
     if (viewType >= TYPE_OFFSET_FOOTER) { // 如果是 Footer
       return new BaseRecyclerViewHolder(mFooterViews.get(viewType - TYPE_OFFSET_FOOTER));
     }
@@ -110,12 +115,64 @@ public abstract class BaseRcvAdapter<DATA> extends RecyclerView.Adapter<BaseRecy
 
     int dataItemPosition = getDataItemPosition(position);
 
-    if (dataItemPosition == -1) { // 当前不是“Content Item”
-      return;
+    if (dataItemPosition != -1) { // 当前是“Content Item”
+      DATA data = getDataItem(dataItemPosition);
+      convert(holder, data, getDataItemViewTypeHV(data));
+    }
+  }
+
+  @Override public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    super.onAttachedToRecyclerView(recyclerView);
+
+    RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+
+    if (manager instanceof GridLayoutManager) {
+
+      final GridLayoutManager gridLayoutManager = ((GridLayoutManager) manager);
+
+      gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+        @Override public int getSpanSize(int position) {
+
+          if (getItemViewType(position) >= TYPE_OFFSET_FOOTER) {
+            return gridLayoutManager.getSpanCount();
+          }
+
+          if (getItemViewType(position) >= TYPE_OFFSET_HEADER) {
+            return gridLayoutManager.getSpanCount();
+          }
+
+          return 1;
+        }
+      });
+    }
+  }
+
+  @Override public void onViewAttachedToWindow(BaseRecyclerViewHolder holder) {
+    super.onViewAttachedToWindow(holder);
+
+    ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+
+    if (layoutParams != null && layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+
+      StaggeredGridLayoutManager.LayoutParams staggeredGridLayoutParams =
+          (StaggeredGridLayoutManager.LayoutParams) layoutParams;
+
+      if (getItemViewType(holder.getLayoutPosition()) >= TYPE_OFFSET_FOOTER) {
+        staggeredGridLayoutParams.setFullSpan(true);
+      }
+
+      if (getItemViewType(holder.getLayoutPosition()) >= TYPE_OFFSET_HEADER) {
+        staggeredGridLayoutParams.setFullSpan(true);
+      }
+
+      staggeredGridLayoutParams.setFullSpan(false);
     }
 
-    DATA data = getDataItem(dataItemPosition);
-    convert(holder, data, getDataItemViewTypeHV(data));
+    ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+    if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+      StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
+      p.setFullSpan(getItemViewType(holder.getLayoutPosition()) >= TYPE_OFFSET_FOOTER);
+    }
   }
 
   @Override public int getItemViewType(int position) {
@@ -138,7 +195,6 @@ public abstract class BaseRcvAdapter<DATA> extends RecyclerView.Adapter<BaseRecy
     } else {
 
       position -= totalDataCount;
-
       if (position < footerViewCount) {
         return position + TYPE_OFFSET_FOOTER;
       }
@@ -159,15 +215,15 @@ public abstract class BaseRcvAdapter<DATA> extends RecyclerView.Adapter<BaseRecy
     int totalDataCount = getDataItemCount(); // 得到“Content”的个数
 
     if (headerViewCount > 0 && position < headerViewCount) {
-      return -1;
+      return -1; // 如果是 Header Item
     }
 
     position -= headerViewCount;
 
     if (position < totalDataCount) {
-      return position;
+      return position; // 如果是 Content Item
     } else {
-      return -1;
+      return -1; // 如果是 Footer Item
     }
   }
 

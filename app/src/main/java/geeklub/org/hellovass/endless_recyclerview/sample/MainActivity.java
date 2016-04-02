@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
@@ -61,10 +61,12 @@ public class MainActivity extends AppCompatActivity {
 
     // set Toolbar
     setSupportActionBar(mToolbar);
+
     // set SwipeRefreshLayout
     mRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
         android.R.color.holo_green_light, android.R.color.holo_orange_light,
         android.R.color.holo_red_light);
+
     mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override public void onRefresh() {
         Observable.timer(2, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             .subscribe();
       }
     });
+
     // set RecyclerView
     mRecyclerView.postDelayed(new Runnable() {
       @Override public void run() {
@@ -88,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
       }
     }, 2 * 1000);
 
-    mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    mRecyclerView.setLayoutManager(
+        new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     mRecyclerView.setAdapter(mSampleAdapter);
     mRecyclerView.useDefaultFooter();// 注意设置 FooterView 的设置顺序
@@ -100,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private List<String> getDummyDataSource() {
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; i <= 9; i++) {
       mDataSource.add("Hello HVEndlessRecyclerView -->>" + i);
     }
     return mDataSource;
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void loadMoreData() {
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 9; i++) {
       mDataSource.add("加载更多数据 -->>" + i);
     }
   }

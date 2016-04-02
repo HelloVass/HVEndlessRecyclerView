@@ -47,6 +47,7 @@ public class HVEndlessRecyclerView extends RecyclerView implements ILoadMoreCont
   }
 
   private void setInternalOnScrollListener() {
+
     addOnScrollListener(new OnRcvScrollListener() {
       @Override public void onBottom() {
         if (mLoadError) {
@@ -75,6 +76,11 @@ public class HVEndlessRecyclerView extends RecyclerView implements ILoadMoreCont
   }
 
   @Override public void setLoadMoreView(View view) {
+
+    if (mBaseRcvAdapter == null) {
+      throw new IllegalStateException("must set BaseRcvAdapter first!");
+    }
+
     // 设置点击加载更多监听器
     view.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
