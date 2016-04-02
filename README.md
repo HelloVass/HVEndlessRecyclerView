@@ -4,8 +4,6 @@
 
 ## Easy way implements loadmore 
 
-
-
 > Thanks [Cube-Sdk](http://cube-sdk.liaohuqiu.net/cn/load-more/)，秋哥的 loadmore 模块真的写得很好！
 
 ### 1.Click 事件支持
@@ -80,7 +78,7 @@
   }
 ```
 
-## 嫌弃我写的 Footer 不好看，你可以自定义 Footer 啊！
+## 嫌弃我写的 Footer 不好看，你可以自定义 Footer ！
 
 ```java
 /**
@@ -100,7 +98,10 @@ public interface ILoadMoreUIHandler {
 }
 ```
 
-### 笔者的善意，nice footer and header
+### Tips
+具体可以参考 DefaultLoadMoreFooterView 这个[栗子](https://github.com/HelloVass/HVEndlessRecyclerView/blob/master/hv_endless_recyclerview%2Fsrc%2Fmain%2Fjava%2Fgeeklub%2Forg%2Fhellovass%2Fendless_recyclerview%2Fwidget%2FDefaultLoadMoreFooterView.java)！
+
+## 最后，来自笔者的善意，nice footer and header
 
 1.当 LayoutManager 为 `LinearLayoutManager` 时
 
@@ -115,8 +116,7 @@ public interface ILoadMoreUIHandler {
 // 请自行想象...
 
 
-### Tips
-具体可以参考 DefaultLoadMoreFooterView 这个[栗子](https://github.com/HelloVass/HVEndlessRecyclerView/blob/master/hv_endless_recyclerview%2Fsrc%2Fmain%2Fjava%2Fgeeklub%2Forg%2Fhellovass%2Fendless_recyclerview%2Fwidget%2FDefaultLoadMoreFooterView.java)！
+
 
 
 
