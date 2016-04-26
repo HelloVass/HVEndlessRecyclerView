@@ -4,8 +4,6 @@ import android.view.View;
 
 /**
  * Created by HelloVass on 15/11/19.
- *
- *
  */
 public interface ILoadMoreContainer {
 
@@ -17,7 +15,7 @@ public interface ILoadMoreContainer {
 
   void setLoadMoreHandler(ILoadMoreHandler loadMoreHandler);
 
-  void onLoadMoreCompleted(boolean isEmpty,boolean hasMore);
+  void onLoadMoreCompleted(boolean isEmpty, boolean hasMore);
 
-  void onLoadMoreFailed(int errorCode,String errorMsg);
+  void onLoadMoreFailed(int errorCode, String errorMsg);
 }

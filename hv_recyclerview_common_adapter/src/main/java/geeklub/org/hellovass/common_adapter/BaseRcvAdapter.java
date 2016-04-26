@@ -1,13 +1,12 @@
 package geeklub.org.hellovass.common_adapter;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import geeklub.org.hellovass.common_adapter.layoutmanager.HVLayoutManager;
 import geeklub.org.hellovass.common_adapter.listener.OnRcvItemClickListener;
 import geeklub.org.hellovass.common_adapter.listener.OnRcvItemLongClickListener;
 import java.util.ArrayList;
@@ -78,8 +77,6 @@ public abstract class BaseRcvAdapter<DATA> extends RecyclerView.Adapter<BaseRecy
 
   @Override public BaseRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-    Log.i(TAG, "viewType -->>>" + viewType);
-
     if (viewType >= TYPE_OFFSET_FOOTER) { // 如果是 Footer
       return new BaseRecyclerViewHolder(mFooterViews.get(viewType - TYPE_OFFSET_FOOTER));
     }
@@ -124,27 +121,8 @@ public abstract class BaseRcvAdapter<DATA> extends RecyclerView.Adapter<BaseRecy
   @Override public void onAttachedToRecyclerView(RecyclerView recyclerView) {
     super.onAttachedToRecyclerView(recyclerView);
 
-    RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-
-    if (manager instanceof GridLayoutManager) {
-
-      final GridLayoutManager gridLayoutManager = ((GridLayoutManager) manager);
-
-      gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-        @Override public int getSpanSize(int position) {
-
-          if (getItemViewType(position) >= TYPE_OFFSET_FOOTER) {
-            return gridLayoutManager.getSpanCount();
-          }
-
-          if (getItemViewType(position) >= TYPE_OFFSET_HEADER) {
-            return gridLayoutManager.getSpanCount();
-          }
-
-          return 1;
-        }
-      });
-    }
+    HVLayoutManager layoutManager = (HVLayoutManager) recyclerView.getLayoutManager();
+    layoutManager.setBaseRcvAdapter(this);
   }
 
   @Override public void onViewAttachedToWindow(BaseRecyclerViewHolder holder) {
@@ -157,21 +135,11 @@ public abstract class BaseRcvAdapter<DATA> extends RecyclerView.Adapter<BaseRecy
       StaggeredGridLayoutManager.LayoutParams staggeredGridLayoutParams =
           (StaggeredGridLayoutManager.LayoutParams) layoutParams;
 
-      if (getItemViewType(holder.getLayoutPosition()) >= TYPE_OFFSET_FOOTER) {
-        staggeredGridLayoutParams.setFullSpan(true);
-      }
-
-      if (getItemViewType(holder.getLayoutPosition()) >= TYPE_OFFSET_HEADER) {
+      if (isFooter(holder.getLayoutPosition()) || isHeader(holder.getLayoutPosition())) {
         staggeredGridLayoutParams.setFullSpan(true);
       }
 
       staggeredGridLayoutParams.setFullSpan(false);
-    }
-
-    ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-    if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
-      StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
-      p.setFullSpan(getItemViewType(holder.getLayoutPosition()) >= TYPE_OFFSET_FOOTER);
     }
   }
 
@@ -247,6 +215,14 @@ public abstract class BaseRcvAdapter<DATA> extends RecyclerView.Adapter<BaseRecy
 
   public int getFooterViewCount() {
     return mFooterViews.size();
+  }
+
+  public boolean isHeader(int position) {
+    return getItemViewType(position) >= TYPE_OFFSET_HEADER;
+  }
+
+  public boolean isFooter(int position) {
+    return getItemViewType(position) >= TYPE_OFFSET_FOOTER;
   }
 
   /**

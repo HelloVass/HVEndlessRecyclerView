@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
+import geeklub.org.hellovass.common_adapter.layoutmanager.HVGridLayoutManager;
 import geeklub.org.hellovass.common_adapter.listener.OnRcvItemClickListener;
 import geeklub.org.hellovass.common_adapter.listener.OnRcvItemLongClickListener;
 import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreHandler;
@@ -91,10 +91,9 @@ public class MainActivity extends AppCompatActivity {
       }
     }, 2 * 1000);
 
-    mRecyclerView.setLayoutManager(
-        new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+    mRecyclerView.setHVLayoutManager(new HVGridLayoutManager(this, 2));
     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-    mRecyclerView.setAdapter(mSampleAdapter);
+    mRecyclerView.setHVAdapter(mSampleAdapter);
     mRecyclerView.useDefaultFooter();// 注意设置 FooterView 的设置顺序
     mRecyclerView.setLoadMoreHandler(new ILoadMoreHandler() {
       @Override public void onLoadMore() {

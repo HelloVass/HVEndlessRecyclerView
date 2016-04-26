@@ -8,5 +8,4 @@ package geeklub.org.hellovass.endless_recyclerview.loadmore;
 public interface ILoadMoreHandler {
 
   void onLoadMore();
-
 }

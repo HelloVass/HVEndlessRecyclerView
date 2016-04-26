@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import geeklub.org.hellovass.common_adapter.BaseRcvAdapter;
+import geeklub.org.hellovass.common_adapter.layoutmanager.HVLayoutManager;
 import geeklub.org.hellovass.common_adapter.listener.OnRcvScrollListener;
 import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreContainer;
 import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreHandler;
@@ -17,21 +18,23 @@ import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreUIHandler;
  */
 public class HVEndlessRecyclerView extends RecyclerView implements ILoadMoreContainer {
 
-  private boolean mIsLoading = false;
+  private boolean mIsLoading = false; // 是否正在加载
 
-  private boolean mHasMore = true;
+  private boolean mHasMore = true; // 是否还有更多数据
 
-  private boolean mAutoLoadMore = true;
+  private boolean mAutoLoadMore = true; // 是否自动加载更多
 
-  private boolean mLoadError = false;
+  private boolean mLoadError = false; // 是否加载失败
 
-  private boolean mIsEmpty = false;
+  private boolean mIsEmpty = false; // list 是否为空
 
   private ILoadMoreUIHandler mLoadMoreUIHandler;
 
   private ILoadMoreHandler mLoadMoreHandler;
 
   private BaseRcvAdapter<?> mBaseRcvAdapter;
+
+  private HVLayoutManager mHVLayoutManager;
 
   public HVEndlessRecyclerView(Context context) {
     this(context, null);
@@ -46,22 +49,14 @@ public class HVEndlessRecyclerView extends RecyclerView implements ILoadMoreCont
     setInternalOnScrollListener();
   }
 
-  private void setInternalOnScrollListener() {
+  public void setHVLayoutManager(HVLayoutManager layoutManager) {
+    super.setLayoutManager((LayoutManager) layoutManager);
+    mHVLayoutManager = layoutManager;
+  }
 
-    addOnScrollListener(new OnRcvScrollListener() {
-      @Override public void onBottom() {
-        if (mLoadError) {
-          return;
-        }
-        if (mAutoLoadMore) {
-          tryToPerformLoadMore();
-        } else {
-          if (mHasMore) {
-            mLoadMoreUIHandler.onWaitToLoadMore();
-          }
-        }
-      }
-    });
+  public void setHVAdapter(BaseRcvAdapter adapter) {
+    super.setAdapter(adapter);
+    mBaseRcvAdapter = adapter;
   }
 
   public void useDefaultFooter() {
@@ -71,23 +66,28 @@ public class HVEndlessRecyclerView extends RecyclerView implements ILoadMoreCont
     setLoadMoreUIHandler(loadMoreFooterView);
   }
 
-  @Override public void setAutoLoadMore(boolean autoLoadMore) {
-    mAutoLoadMore = autoLoadMore;
-  }
-
+  /**
+   * 设置 footer
+   *
+   * @param view footer
+   */
   @Override public void setLoadMoreView(View view) {
 
     if (mBaseRcvAdapter == null) {
       throw new IllegalStateException("must set BaseRcvAdapter first!");
     }
 
-    // 设置点击加载更多监听器
     view.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         tryToPerformLoadMore();
       }
     });
+
     addLoadMoreFooterView(view);
+  }
+
+  @Override public void setAutoLoadMore(boolean autoLoadMore) {
+    mAutoLoadMore = autoLoadMore;
   }
 
   @Override public void setLoadMoreUIHandler(ILoadMoreUIHandler loadMoreUIHandler) {
@@ -118,35 +118,48 @@ public class HVEndlessRecyclerView extends RecyclerView implements ILoadMoreCont
     }
   }
 
+  private void setInternalOnScrollListener() {
+
+    addOnScrollListener(new OnRcvScrollListener(mHVLayoutManager) {
+
+      @Override public void onBottom() {
+
+        if (mLoadError) { // 如果加载出错，return
+          return;
+        }
+        if (mAutoLoadMore) { // 如果mAutoLoadMore被设置为true
+          tryToPerformLoadMore();
+        } else {
+          if (mHasMore) { // 如果有更多数据
+            mLoadMoreUIHandler.onWaitToLoadMore(); // 显示”点击加载更多“
+          }
+        }
+      }
+    });
+  }
+
   private void tryToPerformLoadMore() {
 
-    if (mIsLoading) {
+    if (mIsLoading) { // 如果正在加载中，return
       return;
     }
 
-    if (!mHasMore && !mIsEmpty) {
+    if (!mHasMore && !mIsEmpty) { // 如果没有更多数据并且数据为空
       return;
     }
 
     mIsLoading = true;
 
-    // 显示正在加载中
     if (mLoadMoreUIHandler != null) {
-      mLoadMoreUIHandler.onLoading();
+      mLoadMoreUIHandler.onLoading(); // 显示正在加载中
     }
 
-    // 开始加载数据
     if (mLoadMoreHandler != null) {
-      mLoadMoreHandler.onLoadMore();
+      mLoadMoreHandler.onLoadMore(); // 开始加载数据
     }
   }
 
   private void addLoadMoreFooterView(View view) {
     mBaseRcvAdapter.addFooterView(view);
-  }
-
-  public void setAdapter(BaseRcvAdapter<?> adapter) {
-    super.setAdapter(adapter);
-    mBaseRcvAdapter = adapter;
   }
 }
