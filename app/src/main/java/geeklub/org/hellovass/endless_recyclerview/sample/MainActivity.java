@@ -91,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
       }
     }, 2 * 1000);
 
-    mRecyclerView.setHVLayoutManager(new HVGridLayoutManager(this, 2));
+    mRecyclerView.setHVLayoutManager(new HVGridLayoutManager(this, 3));
     mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     mRecyclerView.setHVAdapter(mSampleAdapter);
-    mRecyclerView.useDefaultFooter();// 注意设置 FooterView 的设置顺序
+    mRecyclerView.useDefaultFooter(); // 使用“footer”时，请记得先设置“adapter”哦！
     mRecyclerView.setLoadMoreHandler(new ILoadMoreHandler() {
       @Override public void onLoadMore() {
         simulateLoadMoreData();
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void fetchingNewData() {
     mDataSource.clear();
-    for (int i = 0; i <= 1; i++) {
+    for (int i = 0; i < 1; i++) {
       mDataSource.add("刷新得到的数据 -->>" + System.currentTimeMillis());
     }
   }

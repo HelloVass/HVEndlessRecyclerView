@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import geeklub.org.hellovass.common_adapter.BaseRcvAdapter;
 import geeklub.org.hellovass.common_adapter.layoutmanager.HVLayoutManager;
-import geeklub.org.hellovass.common_adapter.listener.OnRcvScrollListener;
 import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreContainer;
 import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreHandler;
 import geeklub.org.hellovass.endless_recyclerview.loadmore.ILoadMoreUIHandler;
@@ -120,18 +119,29 @@ public class HVEndlessRecyclerView extends RecyclerView implements ILoadMoreCont
 
   private void setInternalOnScrollListener() {
 
-    addOnScrollListener(new OnRcvScrollListener(mHVLayoutManager) {
+    addOnScrollListener(new OnScrollListener() {
 
-      @Override public void onBottom() {
+      @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+      }
 
-        if (mLoadError) { // 如果加载出错，return
-          return;
-        }
-        if (mAutoLoadMore) { // 如果mAutoLoadMore被设置为true
-          tryToPerformLoadMore();
-        } else {
-          if (mHasMore) { // 如果有更多数据
-            mLoadMoreUIHandler.onWaitToLoadMore(); // 显示”点击加载更多“
+      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+
+        int totalItemCount = mHVLayoutManager.getHVItemCount();
+        int lastVisibleItemPosition = mHVLayoutManager.findHVLastVisibleItemPosition();
+
+        if (lastVisibleItemPosition >= totalItemCount - 1) {
+
+          if (mLoadError) { // 如果加载出错，return
+            return;
+          }
+          if (mAutoLoadMore) { // 如果mAutoLoadMore被设置为true
+            tryToPerformLoadMore();
+          } else {
+            if (mHasMore) { // 如果有更多数据
+              mLoadMoreUIHandler.onWaitToLoadMore(); // 显示”点击加载更多“
+            }
           }
         }
       }
