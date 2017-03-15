@@ -1,5 +1,7 @@
 # HVEndlessRecyclerView
 
+## 该项目是学习如何封装 loadmore 功能时候的实验作品，未投入生产环境测试，如有需要，请移步至 [PullRecycler](https://github.com/HelloVass/HVTea/blob/master/app/src/main/java/info/hellovass/hvteademo/pullrecycler/README.md)
+
 [![](https://jitpack.io/v/HelloVass/HVEndlessRecyclerView.svg)](https://jitpack.io/#HelloVass/HVEndlessRecyclerView)
 
 ## Easy way implements loadmore 
